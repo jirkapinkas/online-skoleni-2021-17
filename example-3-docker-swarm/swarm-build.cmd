@@ -20,5 +20,5 @@ docker build --tag micro-mailing .
 cd ..
 
 rem run docker-compose
-docker stack deploy -c docker-compose.yml myapp
+docker stack deploy -c swarm-docker-compose.yml myapp
 

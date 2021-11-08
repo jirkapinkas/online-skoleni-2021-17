@@ -1,0 +1,76 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: mailing-deployment
+  labels:
+    app: mailing
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: mailing
+  template:
+    metadata:
+      labels:
+        app: mailing
+    spec:
+      containers:
+        - name: mailing
+          image: micro-mailing:latest
+          # https://stackoverflow.com/questions/42564058/how-to-use-local-docker-images-with-minikube
+          imagePullPolicy: Never
+          ports:
+            - containerPort: 8080
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: mailing
+  labels:
+    app: mailing
+spec:
+  selector:
+    app: mailing
+  ports:
+    - name: http
+      port: 8080
+      targetPort: 8080
+  type: LoadBalancer
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: crm-deployment
+  labels:
+    app: crm
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: crm
+  template:
+    metadata:
+      labels:
+        app: crm
+    spec:
+      containers:
+        - name: crm
+          image: micro-crm:latest
+          # https://stackoverflow.com/questions/42564058/how-to-use-local-docker-images-with-minikube
+          imagePullPolicy: Never
+          ports:
+            - containerPort: 8080
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: crm
+  labels:
+    app: crm
+spec:
+  selector:
+    app: crm
+  ports:
+    - name: http
+      port: 8080
+      targetPort: 8080
