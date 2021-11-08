@@ -8,3 +8,6 @@
 
 ## Rozšíření: 
 
+Zobrazení logů:
+
+		docker-compose logs --follow
