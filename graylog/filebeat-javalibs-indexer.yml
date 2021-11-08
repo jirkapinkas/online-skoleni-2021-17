@@ -1,0 +1,14 @@
+filebeat.inputs:
+- type: log
+  paths:
+    - '/logy/logging.log*'
+  multiline.type: pattern
+  multiline.pattern: '^[[:space:]]+(at|\.{3})[[:space:]]+\b|^Caused by:'
+  multiline.negate: false
+  multiline.match: after
+processors:
+filebeat.config.modules:
+  path: ${path.config}/modules.d/*.yml
+  reload.enabled: false
+output.logstash:
+  hosts: ["graylog:5045"]

@@ -1,0 +1,14 @@
+version: '3.8'
+services:
+  crm:
+    deploy:
+      replicas: 2
+    image: micro-crm
+  mailing:
+    image: micro-mailing
+    ports:
+    - "8080:8080"
+  admin:
+    image: spring-boot-admin-server
+    ports:
+    - "9999:8080"

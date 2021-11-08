@@ -1,0 +1,9 @@
+version: '3.8'
+services:
+  crm:
+    build: ./micro-crm
+  mailing:
+    build: ./micro-mailing
+    ports:
+    - "8080:8080"
+    

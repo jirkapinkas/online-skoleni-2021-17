@@ -1,0 +1,66 @@
+version: '3.8'
+services:
+  crm:
+    # deploy:
+    #   replicas: 2
+    image: micro-crm
+    depends_on:
+      - postgres_1
+    ports:
+      - "9090:8080"
+  mailing:
+    image: micro-mailing
+    depends_on:
+      - postgres_2
+      - connect
+      - crm
+    ports:
+      - "8080:8080"
+  postgres_1:
+    image: debezium/postgres:latest
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+  postgres_2:
+    image: debezium/postgres:latest
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+  pgadmin:
+    image: dpage/pgadmin4:latest
+    depends_on:
+      - postgres_1
+      - postgres_2
+    ports:
+      - "5050:80"
+    environment:
+      PGADMIN_DEFAULT_EMAIL: admin@admin.cz
+      PGADMIN_DEFAULT_PASSWORD: admin
+  zookeeper:
+    image: debezium/zookeeper:latest
+    ports:
+     - "2181:2181"
+     - "2888:2888"
+     - "3888:3888"
+     - "2020:8080"
+  kafka:
+    image: debezium/kafka:latest
+    depends_on:
+      - zookeeper
+    ports:
+      - "9092:9092"
+    environment:
+      - ZOOKEEPER_CONNECT=zookeeper:2181
+#     - ADVERTISED_HOST_NAME=192.168.178.53
+  connect:
+    image: debezium/connect:latest
+    depends_on:
+      - kafka
+    ports:
+      - "8083:8083"
+    environment:
+     - BOOTSTRAP_SERVERS=kafka:9092
+     - GROUP_ID=1
+     - CONFIG_STORAGE_TOPIC=my_connect_configs
+     - OFFSET_STORAGE_TOPIC=my_connect_offsets
+     - STATUS_STORAGE_TOPIC=my_connect_statuses
