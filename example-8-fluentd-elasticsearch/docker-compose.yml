@@ -1,0 +1,37 @@
+version: '3'
+services:
+  elasticsearch:
+    image: "docker.elastic.co/elasticsearch/elasticsearch:7.11.1"
+    ports:
+      - "9200:9200"
+      - "9300:9300"
+    environment:
+      discovery.type: single-node
+  kibana:
+    image: "docker.elastic.co/kibana/kibana:7.11.1"
+    ports:
+      - "5601:5601"
+    environment:
+      ELASTICSEARCH_HOSTS: http://elasticsearch:9200
+  fluentd:
+    build: ./fluentd-build
+    image: "fluent/fluentd:edge"
+    ports:
+      - "24224:24224"
+      - "24224:24224/udp"
+    volumes:
+      - myapp_logs:/tmp/log/
+  myapp:
+    image: "demo:0.0.1-SNAPSHOT"
+    # Aplikace bude uvnitr kontejneru bezet pod root uzivatelem
+    # Je to kvuli sdilenemu volume /tmp/log, ktery Docker vytvori jako root,
+    # tak aby se k nemu aplikace dostala
+    user: root
+    ports:
+      - "8080:8080"
+    volumes:
+      - myapp_logs:/tmp/log/
+    depends_on: 
+      - fluentd
+volumes: 
+  myapp_logs:

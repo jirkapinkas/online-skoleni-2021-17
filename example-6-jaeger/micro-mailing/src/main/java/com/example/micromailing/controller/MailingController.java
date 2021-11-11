@@ -14,6 +14,9 @@ import org.springframework.web.reactive.function.client.WebClient;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
+import java.util.Arrays;
+import java.util.List;
+
 @RestController
 public class MailingController {
 
@@ -51,7 +54,7 @@ public class MailingController {
                 .uri("products")
                 .retrieve()
                 .bodyToFlux(Product.class);
-        Mono<Long> productsSizeMono = productsFlux.reduce(0L, (product, product2) -> 1L);
+        Mono<Long> productsSizeMono = productsFlux.reduce(0L, (count, product) -> count + 1L);
         Mono<String> resultMono = Mono.zip(customerMono, productsSizeMono, (customer, size) -> {
             return "TODO send email to: " + customer.getEmail() + " to say hello to: " + customer.getName()
                     + ", send him info about : " + size + " products";
