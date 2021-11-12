@@ -1,0 +1,48 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: crm-deployment
+  labels:
+    app: crm
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: crm
+  template:
+    metadata:
+      labels:
+        app: crm
+    spec:
+      containers:
+        - name: crm
+          image: jirkapinkas/micro-crm:latest
+          ports:
+            - containerPort: 8080
+          livenessProbe:
+            httpGet:
+              path: /actuator/health
+              port: 8080
+            initialDelaySeconds: 600
+          readinessProbe:
+            httpGet:
+              path: /actuator/health
+              port: 8080
+            initialDelaySeconds: 600
+          # resources:
+          #   limits:
+          #     memory: "512Mi"
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: crm
+  labels:
+    app: crm
+spec:
+  selector:
+    app: crm
+  ports:
+    - name: http
+      port: 8080
+      targetPort: 8080

@@ -1,0 +1,49 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: mailing-deployment
+  labels:
+    app: mailing
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: mailing
+  template:
+    metadata:
+      labels:
+        app: mailing
+    spec:
+      containers:
+        - name: mailing
+          image: jirkapinkas/micro-mailing:latest
+          ports:
+            - containerPort: 8080
+          livenessProbe:
+            httpGet:
+              path: /actuator/health
+              port: 8080
+            initialDelaySeconds: 600
+          readinessProbe:
+            httpGet:
+              path: /actuator/health
+              port: 8080
+            initialDelaySeconds: 600
+          # resources:
+          #   limits:
+          #     memory: "512Mi"
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: mailing
+  labels:
+    app: mailing
+spec:
+  selector:
+    app: mailing
+  ports:
+    - name: http
+      port: 8080
+      targetPort: 8080
+  type: LoadBalancer
