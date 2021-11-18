@@ -4,7 +4,7 @@ Spustit build.cmd
 
 Poté je zapotřebí zavolat:
 
-docker exec -it KAFKA_CONTAINER_NAME bash
+docker exec -it --rm KAFKA_CONTAINER_NAME bash
 
 Tím se dostaneme dovnitř Kafka kontejneru, kde zavoláme:
 
