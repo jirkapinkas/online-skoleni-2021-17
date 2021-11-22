@@ -66,3 +66,7 @@ Vypnutí:
 
 ## Rozšíření: 
 
+Jak zobrazit data v Kafka topicu:
+
+  kafka-console-consumer.sh --bootstrap-server=kafka:9092 --from-beginning --topic outbox.event.Customer
+
