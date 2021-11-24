@@ -13,6 +13,8 @@ services:
       - "5601:5601"
     environment:
       ELASTICSEARCH_HOSTS: http://elasticsearch:9200
+      # https://www.elastic.co/guide/en/kibana/7.11/alert-action-settings-kb.html#general-alert-action-settings
+      XPACK_ENCRYPTEDSAVEDOBJECTS_ENCRYPTIONKEY: fCbfqHcHimbCoET3WEnVgkBK8ddXchWWBMLNzqmdNkwbaMHBGj89DvexgayzUEqe
   fluentd:
     build: ./fluentd-build
     image: "fluent/fluentd:edge"
