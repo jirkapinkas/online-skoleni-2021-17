@@ -10,6 +10,12 @@
     kubectl describe pod POD_NAME
     kubectl logs POD_NAME
 
+# V adresari example-X zavolat:
+
+    https://gitlab.com/jirkapinkas/micro-products.git
+    https://gitlab.com/jirkapinkas/micro-crm.git
+    https://gitlab.com/jirkapinkas/micro-mailing.git
+
 # Aplikace jsou zde:
 
 - https://gitlab.com/jirkapinkas/micro-products
